@@ -10,14 +10,10 @@ class PlateLicense {
         this.licenses = [MOCK_LICENSE_OBJECT];
     }
 
-    getAllLicenses(){
+    getAllLicenses() {
         return this.licenses;
     }
 }
 
 
-//create a new class instance
-const pl = new PlateLicense();
-//use the variable & method of this class
-console.log(pl.licenses)
-console.log(pl.getAllLicenses())
+module.exports = PlateLicense;
