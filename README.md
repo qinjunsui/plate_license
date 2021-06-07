@@ -11,7 +11,7 @@
 git remote add origin <自己的repo地址，https的那个>
 ```
 
-如果需要移除remote点，或者遇到not file directory的情况，我们就最好remove 了  remote点，再重新加上
+如果需要移除remote点，或者遇到not file directory的情况，我们就最好remove了remote点，再重新加上
 
  ## 添加commit
 
@@ -63,3 +63,19 @@ npx jasmine init
 npm test
 ```
 
+## 将所有测试放到一个test文件夹下面
+```
+jasmine-node test
+```
+会运行所有在test文件夹下面的测试
+
+## 将每一个测试的细节都打印出来
+
+```
+jasmine-node test --verbose 
+```
+
+## 将所有的test coverage打印出来
+
+```
+npc jasmine-node test --verbose
