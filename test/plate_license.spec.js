@@ -22,7 +22,7 @@ describe("#2 Track records", () => {
 describe("#3 Generate Plate Licensee", () => {
     // const licenseObject = pl.generateNewLicense();
     // const licenseNumber = licenseObject.license;
-    
+
 
     describe("For license number", () => {
         const { license } = pl.generateNewLicense();
@@ -60,3 +60,13 @@ describe("#3 Generate Plate Licensee", () => {
     })
 });
 
+describe("#2 License generator essential", () => {
+    it("can generate 50k plate license functionally", () => {
+        const COUNT = 50000;
+        for (let i = 0; i < COUNT; i++) {
+            pl.generateNewLicense();
+        }
+        expect(pl.getAllLicenses().length).toBe(50001);
+        expect(pl.licenseSet.size).toBe(50001);
+    });
+});
