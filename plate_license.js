@@ -45,13 +45,22 @@ class PlateLicense {
             registered: new Date().getTime(),
             status: 'REGISTERED',
         };
-        
+
         this.licenses.push(licenseObject);  // add licenseObject to array
         return licenseObject;
     }
 
     hasLicenseNumber(license) {
         return this.licenseSet.has(license);
+    }
+
+    batchGenerateLicenses(n) {
+        const newLicenseObjects = [];
+        while (n > 0) {
+            newLicenseObjects.push(this.generateNewLicense());
+            n--;
+        }
+        return newLicenseObjects;
     }
 
     _getRandomItemFromArray(arr) {   //private function, no need test

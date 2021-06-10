@@ -79,3 +79,9 @@ jasmine-node test --verbose
 
 ```
 npc jasmine-node test --verbose
+```
+
+## recover Github
+```
+git reset --hard
+```
