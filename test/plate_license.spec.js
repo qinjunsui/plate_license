@@ -15,17 +15,17 @@ describe("#1 Generate PlateLicense class", () => {
 describe("#2 Track records", () => {
     it("successfully get all plate licenses", () => {
         const pl = new PlateLicense();
-        expect(pl.getAllLicenses().length).toBe(1);
+        expect(pl.getLicenses().length).toBe(1);
     });
 });
 
 describe("#3 Generate Plate Licensee", () => {
-    // const licenseObject = pl.generateNewLicense();
+    // const licenseObject = pl.generateLicense();
     // const licenseNumber = licenseObject.license;
 
 
     describe("For license number", () => {
-        const { license } = pl.generateNewLicense();
+        const { license } = pl.generateLicense();
         it("it has 7 digits", () => {
             expect(license.length).toBe(7)
         });
@@ -45,18 +45,18 @@ describe("#3 Generate Plate Licensee", () => {
     });
 
     it("have register time defined", () => {
-        const { registered } = pl.generateNewLicense();
+        const { registered } = pl.generateLicense();
         expect(registered).toBeDefined();
     });
 
     it("have status is REGISTERED", () => {
-        const { status } = pl.generateNewLicense();
+        const { status } = pl.generateLicense();
         expect(status).toBe("REGISTERED");
     });
 
     it("updates the licenses variables in class", () => {
-        pl.generateNewLicense();
-        expect(pl.getAllLicenses().length).toBe(2)
+        pl.generateLicense();
+        expect(pl.getLicenses().length).toBe(2)
     })
 });
 
@@ -64,18 +64,42 @@ describe("#3 License generator essential", () => {
     it("can generate 50k plate license functionally", () => {
         const COUNT = 50000;
         for (let i = 0; i < COUNT; i++) {
-            pl.generateNewLicense();
+            pl.generateLicense();
         }
-        expect(pl.getAllLicenses().length).toBe(50001);
+        expect(pl.getLicenses().length).toBe(50001);
         expect(pl.licenseSet.size).toBe(50001);
     });
 });
 
 describe("#4 Generate batch licenses", () => {
     it("can generate number input license", () => {
-        expect(pl.getAllLicenses().length).toBe(1);
+        expect(pl.getLicenses().length).toBe(1);
         const newLicenses = pl.batchGenerateLicenses(4);
         expect(newLicenses.length).toBe(4);
         expect(pl.licenseSet.size).toBe(5);
     })
 });
+
+describe("#5 Anti-hack", () => {
+    it("can backup all licenses", () => {
+        pl.batchGenerateLicenses(100);
+        pl.backupLicenses();
+        pl.removeLicensesFile();
+    });
+
+    it("can restore all licenses", async () => {
+        // Step 1: Default
+        expect(pl.getLicenses().length).toBe(1)
+        // Step 2: Add samples
+        pl.batchGenerateLicenses(10);
+        expect(pl.getLicenses().length).toBe(11);
+        // Step 3: Backup
+        pl.backupLicenses();
+        // Step 4: Mack system crush
+        pl = new PlateLicense();
+        // Step 5: Restore everything
+        await pl.restoreLicenses();
+        expect(pl.getLicenses().length).toBe(11)
+        pl.removeLicensesFile();
+    })
+})

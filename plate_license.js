@@ -1,3 +1,6 @@
+const fs = require('fs');
+const LICENSES_FILE = './licenses.json';
+
 const MOCK_LICENSE_OBJECT = {
     "license": "6LZD666",           //string
     "registered": 1622953087393,    //UTC timestamp
@@ -12,11 +15,11 @@ class PlateLicense {
         this.licenseSet.add(MOCK_LICENSE_OBJECT.license);
     }
 
-    getAllLicenses() {
+    getLicenses() {
         return this.licenses;
     }
 
-    generateNewLicense() {
+    generateLicense() {
         const numbers = Array(10).fill().map((_, i) => i.toString());
         const letterCodes = Array(26).fill().map((_, i) => i);
         //ascii conversion => 'A', 'B' ... 'Z'
@@ -54,18 +57,36 @@ class PlateLicense {
         return this.licenseSet.has(license);
     }
 
+    _getRandomItemFromArray(arr) {   //private function, no need test
+        const randomIndex = Math.floor(Math.random() * arr.length);
+        return arr[randomIndex];
+    }
+
     batchGenerateLicenses(n) {
         const newLicenseObjects = [];
-        while (n > 0) {
-            newLicenseObjects.push(this.generateNewLicense());
-            n--;
+        while (n-- > 0) {
+            newLicenseObjects.push(this.generateLicense());
         }
         return newLicenseObjects;
     }
 
-    _getRandomItemFromArray(arr) {   //private function, no need test
-        const randomIndex = Math.floor(Math.random() * arr.length);
-        return arr[randomIndex];
+    backupLicenses() {
+        // fs.writeFile(<store_file_path>, <data>, <callback>)
+        return fs.writeFileSync(
+            LICENSES_FILE,
+            JSON.stringify(this.licenses, null, 2), //(data, null, 2) 排版显示格式，由一行变成缩进
+            () => { }
+        );
+    }
+
+    restoreLicenses() {
+        return fs.readFile(LICENSES_FILE, 'utf8', (_, fileData) => {
+            this.licenses = JSON.parse(fileData);
+        });
+    }
+
+    removeLicensesFile() {
+        return fs.unlink(LICENSES_FILE, () => { });
     }
 }
 
