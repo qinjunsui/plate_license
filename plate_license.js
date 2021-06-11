@@ -105,7 +105,12 @@ class PlateLicense {
         }
     }
 
-
+    unRegisterLicense(licenseNum) {
+        // update licenes object array
+        this.licenses = this.licenses.filter(licenseObj => licenseObj.license !== licenseNum);
+        // update license set
+        this.licenseSet.delete(licenseNum);
+    }
 }
 
 

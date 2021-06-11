@@ -128,18 +128,28 @@ describe("#6 Research license", () => {
         expect(licenseObj.status).toBe("SUSPENDED");
     });
 
-    it("will not update non-exist license", ()=>{       // method 1
+    it("will not update non-exist license", () => {       // method 1
         const defaultCase = pl.getLicense("6LZD666");
         expect(defaultCase.status).toBe("SUSPENDED");
         pl.updateLicenseStatus('7XJP777', "REGISTERED");
         expect(defaultCase.status).toBe('SUSPENDED');
     });
-    it("will not update non-exist license", ()=>{       //method 2
+    it("will not update non-exist license", () => {       //method 2
         pl.updateLicenseStatus("6LZD666", "REGISTERED");
         const defaultCase = pl.getLicense("6LZD666");
         expect(defaultCase.status).toBe("REGISTERED");
         pl.updateLicenseStatus('7XJP777', "REGISTERED");
         expect(defaultCase.status).toBe('REGISTERED');
     });
+});
+
+describe("#7 UnRegister license", () => {
+    it("Should work!", () => {
+        expect(pl.licenses.length).toBe(1);
+        expect(pl.licenseSet.size).toBe(1);
+        pl.unRegisterLicense("6LZD666");
+        expect(pl.licenses.length).toBe(0);
+        expect(pl.licenseSet.size).toBe(0);
+    })
 })
 
