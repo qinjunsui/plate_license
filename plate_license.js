@@ -2,9 +2,9 @@ const fs = require('fs');
 const LICENSES_FILE = './licenses.json';
 
 const MOCK_LICENSE_OBJECT = {
-    "license": "6LZD666",           //string
-    "registered": 1622953087393,    //UTC timestamp
-    "status": "REGISTERED"          //string
+    license: "6LZD666",           //string
+    registered: 1622953087393,    //UTC timestamp
+    status: "REGISTERED"          //string
 }
 
 class PlateLicense {
@@ -75,7 +75,6 @@ class PlateLicense {
         return fs.writeFileSync(
             LICENSES_FILE,
             JSON.stringify(this.licenses, null, 2), //(data, null, 2) 排版显示格式，由一行变成缩进
-            () => { }
         );
     }
 
@@ -88,6 +87,25 @@ class PlateLicense {
     removeLicensesFile() {
         return fs.unlink(LICENSES_FILE, () => { });
     }
+
+    getLicense(licenseNum) {
+        for (const licenseObj of this.licenses) {
+            if (licenseObj.license === licenseNum) {
+                return licenseObj;
+            }
+        }
+        return null;
+    }
+
+    // i.e. this.updateLicenseStatus('6LZD666', 'SUSPENDED')
+    updateLicenseStatus(licenseNum, updateStatue) {
+        const licenseObj = this.getLicense(licenseNum);
+        if (licenseObj) {
+            licenseObj.status = updateStatue;
+        }
+    }
+
+
 }
 
 
