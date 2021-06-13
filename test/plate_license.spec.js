@@ -180,11 +180,10 @@ describe("#9 Get suspicious licenses", () => {
 })
 
 describe("#12 For the stats-men", () => {
+    pl.batchGenerateLicenses(1000);
 
     it("can get the magic licenses (sum of num equal to 21)", () => {
-        pl.batchGenerateLicenses(1000);
         const licensesArray = pl.getMagicLicenses();
-
         /** Method 1 */
         // licensesArray.map(license => {
         //     const numStr = license[0] + license.slice(-3)
@@ -200,6 +199,17 @@ describe("#12 For the stats-men", () => {
             expect(sum).toBe(21);
         }
     });
+
+    it("the magic licenses are sorted in ascending order", () => {
+        const getMagicLicenses = pl.getMagicLicenses();
+        if (getMagicLicenses.length >= 2) {
+            for (let i = 0; i < getMagicLicenses.length - 1; i++) {
+                const lo = getMagicLicenses[i];
+                const hi = getMagicLicenses[i + 1];
+                expect(lo).not.toBeLessThan(hi);
+            }
+        }
+    })
 
     it("", () => {
         pl.batchGenerateLicenses(100);

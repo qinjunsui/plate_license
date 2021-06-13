@@ -159,7 +159,7 @@ class PlateLicense {
             //     return acc;
             // }, 0);
             return sum === 21;
-        })
+        }).sort();
     }
 
     // 返回有两个相同字母的车牌号array
