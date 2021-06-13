@@ -181,7 +181,6 @@ describe("#9 Get suspicious licenses", () => {
 
 describe("#12 For the stats-men", () => {
 
-
     it("can get the magic licenses (sum of num equal to 21)", () => {
         pl.batchGenerateLicenses(1000);
         const licensesArray = pl.getMagicLicenses();
@@ -265,5 +264,14 @@ describe("#12 For the stats-men", () => {
             letterSet.add(letter);
         }
         expect(letterSet.size).toBe(1)
+    });
+
+    it("get royalLicense", () => {
+        pl.batchGenerateLicenses(4000);
+        const royalLicenses = pl.getRoyalLicenses();
+        for (const licenseNum of royalLicenses) {
+            const numberParts = licenseNum.split("").filter(letter => !isNaN(letter))
+            expect(new Set(numberParts).size).toBeLessThan(4)
+        }
     })
 })

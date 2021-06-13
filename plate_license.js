@@ -131,8 +131,8 @@ class PlateLicense {
                 if (letter === '7' && i >= 4) count7++
             }
             return countX === 2 && count7 === 1;
-        }).sort((a, b) => a.registered > b.registered ? -1 : 1)
-        // .sort((a,b)=>b.registered-a.registered)
+        }).sort((a, b) => b.registered - a.registered)
+
     }
 
     // 返回一个含有所有数字总数是21的车牌号码的array，升序排列
@@ -210,32 +210,51 @@ class PlateLicense {
     }
 
     // 返回三个字母都相同&至少两个数字相同的车牌号array
-    getRoyalLicenses() {
-        const licenseArray = [];
-        for (let licenseNum of this.licenseSet) {
-            const letters = licenseNum.slice(1, 4);
-            const nums = licenseNum[0] + licenseNum.slice(-3);
-            const numMap = {};
-            for (let i of nums) {
-                numMap[i] = numMap[i] ? numMap[i]++ : 1
-            }
+    // getRoyalLicenses() {
+    //     const licenseArray = [];
+    //     for (let licenseNum of this.licenseSet) {
+    //         const letters = licenseNum.slice(1, 4);
+    //         const nums = licenseNum[0] + licenseNum.slice(-3);
+    //         const numMap = {};
+    //         for (let i of nums) {
+    //             numMap[i] = numMap[i] ? numMap[i]++ : 1
+    //         }
 
-            if (letters[0] === letters[1] && letters[1] === letters[2] && Object.values(numMap).sort().slice(-1) >= 2) licenseArray.push(licenseNum)
-        }
-        return licenseArray;
-    }
+    //         if (letters[0] === letters[1] && letters[1] === letters[2] && Object.values(numMap).sort().slice(-1) >= 2) licenseArray.push(licenseNum)
+    //     }
+    //     return licenseArray;
+    // }
+
+    // getRoyalLicenses() {
+    //     const luckyLicenses = this.getLuckyLicenses();
+    //     const royalLicenses = [];
+    //     for (let licenseNum of luckyLicenses) {
+    //         const nums = licenseNum[0] + licenseNum.slice(-3);
+    //         const numMap = {};
+    //         for (let num of nums) {
+    //             numMap[num] = numMap[num] + 1 || 1
+
+    //         }
+    //         console.log(licenseNum)
+    //         console.log(Object.values(numMap).sort().slice(-1)[0])
+    //         if (Object.values(numMap).sort().slice(-1)[0] >= 2) {
+    //             royalLicenses.push(licenseNum)
+    //         }
+    //     }
+    //     return royalLicenses;
+    // }
+
     getRoyalLicenses() {
-        const licenseArray = this.getLuckyLicenses();
-        for (let licenseNum of licenseArray) {
-            const nums = licenseNum[0] + licenseNum.slice(-3);
-            const numMap = {};
-            for (let i of nums) {
-                numMap[i] = numMap[i] ? numMap[i]++ : 1
-            }
-            if (Object.values(numMap).sort().slice(-1) >= 2) licenseArray.push(licenseNum)
-        }
-        return licenseArray;
+        // Step 1: get Lucky licenses and filter from them
+        const licenseNumbers = this.getLuckyLicenses();
+        // Step 2: get all the number parts (4 numbers)
+        // Step 3: new Set(numbers).size <= 3
+        return licenseNumbers.filter(licenseNum => {
+            const numberParts = licenseNum.split("").filter((letter) => { return !isNaN(letter) });
+            return new Set(numberParts).size <= 3;
+        })
     }
+
 }
 
 
