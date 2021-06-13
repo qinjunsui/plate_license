@@ -152,7 +152,7 @@ class PlateLicense {
             // Step2: extract the numbers part from license number. i.e. '6LXD666' => '6666
             // !isNaN => isNumber
             const numbers = licenseNum.split("").filter(el => !isNaN(el));
-             // Step3: calculate the sum from the numbers array. i.e. '6666' => 24
+            // Step3: calculate the sum from the numbers array. i.e. '6666' => 24
             const sum = numbers.reduce((acc, num) => acc += Number(num), 0);
             // const sum = numbers.reduce((acc, num) => {
             //     acc += Number(num);
@@ -194,13 +194,19 @@ class PlateLicense {
     }
 
     // 返回三个字母都相同的车牌号array
+    // getLuckyLicenses() {
+    //     const licenseArray = [];
+    //     for (let licenseNum of this.licenseSet) {
+    //         const letters = licenseNum.slice(1, 4);
+    //         if (letters[0] === letters[1] && letters[1] === letters[2]) licenseArray.push(licenseNum)
+    //     }
+    //     return licenseArray;
+    // }
     getLuckyLicenses() {
-        const licenseArray = [];
-        for (let licenseNum of this.licenseSet) {
-            const letters = licenseNum.slice(1, 4);
-            if (letters[0] === letters[1] && letters[1] === letters[2]) licenseArray.push(licenseNum)
-        }
-        return licenseArray;
+        return [...this.licenseSet].filter(licenseNum => {
+            const letterPart = licenseNum.slice(1, 4).split("");
+            return new Set(letterPart).size === 1;
+        })
     }
 
     // 返回三个字母都相同&至少两个数字相同的车牌号array

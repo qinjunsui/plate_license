@@ -256,8 +256,14 @@ describe("#12 For the stats-men", () => {
         }
     });
 
-    it("", () => {
-        pl.batchGenerateLicenses(100);
-
+    it("get the triple letter licenses", () => {
+        pl.batchGenerateLicenses(1000);
+        const tripleLicenses = pl.getLuckyLicenses();
+        const licenseNum = pl._getRandomItemFromArray(tripleLicenses);
+        const letterSet = new Set();
+        for (const letter of licenseNum.slice(1, 4)) {
+            letterSet.add(letter);
+        }
+        expect(letterSet.size).toBe(1)
     })
 })
