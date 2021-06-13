@@ -137,11 +137,29 @@ class PlateLicense {
 
     // 返回一个含有所有数字总数是21的车牌号码的array，升序排列
     getMagicLicenses() {
-        const licenseArray = [];
-        for (let licenseNum of this.licenseSet) {
-            if (Number(licenseNum[0]) + Number(licenseNum[4]) + Number(licenseNum[5]) + Number(licenseNum[6]) === 21) licenseArray.push(licenseNum)
-        }
-        return licenseArray.sort();
+        /** Method 1 */
+        // const licenseArray = [];
+        // for (let licenseNum of this.licenseSet) {
+        //     if (Number(licenseNum[0]) + Number(licenseNum[4]) + Number(licenseNum[5]) + Number(licenseNum[6]) === 21) {
+        //         licenseArray.push(licenseNum)
+        //     }
+        // }
+        // return licenseArray.sort();
+
+        /** Method 2 */
+        // Step1: convert set to array
+        return [...this.licenseSet].filter(licenseNum => {
+            // Step2: extract the numbers part from license number. i.e. '6LXD666' => '6666
+            // !isNaN => isNumber
+            const numbers = licenseNum.split("").filter(el => !isNaN(el));
+            const sum = numbers.reduce((acc, num) => acc += Number(num));
+            // Step3: calculate the sum from the numbers array. i.e. '6666' => 24
+            // const sum = numbers.reduce((acc, num) => {
+            //     acc += Number(num);
+            //     return acc;
+            // }, 0);
+            return sum === 21;
+        })
     }
 
     // 返回有两个相同字母的车牌号array

@@ -170,32 +170,35 @@ describe("#9 Get suspicious licenses", () => {
     });
     it("sorts in descending order", () => {
         if (licenses.length >= 2) {
-            // for (let i = 0; i < licenses.length - 1; i++) {
-            //     const lo = licenses[i];
-            //     const hi = licenses[i + 1];
-            //     expect(lo.registered).not.toBeLessThan(hi.registered);
-            // }
-            licenses.reduce((total, current) => {
-                const lo = total.registered;
-                const hi = current.registered;
-                console.log([lo,hi])
-                expect(lo).not.toBeLessThan(hi)
-            })
-
+            for (let i = 0; i < licenses.length - 1; i++) {
+                const lo = licenses[i];
+                const hi = licenses[i + 1];
+                expect(lo.registered).not.toBeLessThan(hi.registered);
+            }
         }
     })
 })
 
-describe("#12", () => {
-    it("", () => {
+describe("#12 For the stats-men", () => {
+
+    it("can get the magic licenses (sum of num equal to 21)", () => {
         pl.batchGenerateLicenses(1000);
         const licensesArray = pl.getMagicLicenses();
-        // console.log(licensesArray)
-        licensesArray.map(license => {
-            const numStr = license[0] + license.slice(-3)
-            const numArr = numStr.split("")
-            expect(numArr.reduce((a, b) => Number(a) + Number(b))).toEqual(21)
-        })
+
+        /** Method 1 */
+        // licensesArray.map(license => {
+        //     const numStr = license[0] + license.slice(-3)
+        //     const numArr = numStr.split("")
+        //     expect(numArr.reduce((a, b) => Number(a) + Number(b))).toEqual(21)
+        // })
+        /** Method 2 */
+        for (const licenseNum of licensesArray) {
+            const sum = Number(licenseNum[0]) +
+                Number(licenseNum[4]) +
+                Number(licenseNum[5]) +
+                Number(licenseNum[6]);
+            expect(sum).toBe(21);
+        }
     });
 
     it("", () => {
