@@ -180,9 +180,10 @@ describe("#9 Get suspicious licenses", () => {
 })
 
 describe("#12 For the stats-men", () => {
-    pl.batchGenerateLicenses(1000);
+
 
     it("can get the magic licenses (sum of num equal to 21)", () => {
+        pl.batchGenerateLicenses(1000);
         const licensesArray = pl.getMagicLicenses();
         /** Method 1 */
         // licensesArray.map(license => {
@@ -191,33 +192,68 @@ describe("#12 For the stats-men", () => {
         //     expect(numArr.reduce((a, b) => Number(a) + Number(b))).toEqual(21)
         // })
         /** Method 2 */
-        for (const licenseNum of licensesArray) {
-            const sum = Number(licenseNum[0]) +
-                Number(licenseNum[4]) +
-                Number(licenseNum[5]) +
-                Number(licenseNum[6]);
-            expect(sum).toBe(21);
-        }
+        // console.log(licensesArray)
+        // for (const licenseNum of licensesArray) {
+        //     const sum = Number(licenseNum[0]) +
+        //         Number(licenseNum[4]) +
+        //         Number(licenseNum[5]) +
+        //         Number(licenseNum[6]);
+        //     expect(sum).toBe(21);
+        // }
+        /** Method 3 随机抽取测试 */
+        const licenseNum = pl._getRandomItemFromArray(licensesArray);
+        const sum = Number(licenseNum[0]) +
+            Number(licenseNum[4]) +
+            Number(licenseNum[5]) +
+            Number(licenseNum[6]);
+        expect(sum).toBe(21);
     });
 
     it("the magic licenses are sorted in ascending order", () => {
-        const getMagicLicenses = pl.getMagicLicenses();
-        if (getMagicLicenses.length >= 2) {
-            for (let i = 0; i < getMagicLicenses.length - 1; i++) {
-                const lo = getMagicLicenses[i];
-                const hi = getMagicLicenses[i + 1];
-                expect(lo).not.toBeLessThan(hi);
-            }
+        pl.batchGenerateLicenses(1000);
+        const magicLicenses = pl.getMagicLicenses();
+        /** Method 1 */
+        // if (magicLicenses.length >= 2) {
+        //     for (let i = 0; i < magicLicenses.length - 1; i++) {
+        //         const lo = magicLicenses[i];
+        //         const hi = magicLicenses[i + 1];
+        //         expect(lo).toBeLessThan(hi);
+        //     }
+        // }
+
+        /** Method 2 随机抽取测试 */
+        if (magicLicenses.length >= 2) {
+            const lo = magicLicenses[0];
+            const hi = pl._getRandomItemFromArray(magicLicenses.slice(1));
+            expect(lo).toBeLessThan(hi);
         }
+
     })
 
-    it("", () => {
-        pl.batchGenerateLicenses(100);
-        const licensesArray = pl.getDoubleLicenses();
-        licensesArray.map(license => {
-
-
-        })
+    it("can get the double letter licenses", () => {
+        pl.batchGenerateLicenses(1000);
+        const doubleLicenses = pl.getDoubleLicenses();
+        /** Method 1 */
+        // doubleLicenses.map(licenseNum => {
+        //     // i.e. 'LZD' => Set(['L','Z','D']) => size 3
+        //     // i.e. 'ZZD' => Set(['Z','D']) => size 2
+        //     const letterSet = new Set();
+        //     for (const letter of licenseNum.slice(1, 4)) {
+        //         letterSet.add(letter);
+        //     }
+        //     expect(letterSet.size).toBe(2);
+        // });
+        /** Method 2 */
+        const licenseNum = pl._getRandomItemFromArray(doubleLicenses);
+        if (licenseNum) {
+            // i.e. 'LZD' => Set(['L','Z','D']) => size 3
+            // i.e. 'ZZD' => Set(['Z','D']) => size 2
+            const letterSet = new Set();
+            for (const letter of licenseNum.slice(1, 4)) {
+                letterSet.add(letter);
+            }
+            expect(letterSet.size).toBe(2)
+        }
     });
 
     it("", () => {

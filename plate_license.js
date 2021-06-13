@@ -152,8 +152,8 @@ class PlateLicense {
             // Step2: extract the numbers part from license number. i.e. '6LXD666' => '6666
             // !isNaN => isNumber
             const numbers = licenseNum.split("").filter(el => !isNaN(el));
-            const sum = numbers.reduce((acc, num) => acc += Number(num));
-            // Step3: calculate the sum from the numbers array. i.e. '6666' => 24
+             // Step3: calculate the sum from the numbers array. i.e. '6666' => 24
+            const sum = numbers.reduce((acc, num) => acc += Number(num), 0);
             // const sum = numbers.reduce((acc, num) => {
             //     acc += Number(num);
             //     return acc;
@@ -162,14 +162,35 @@ class PlateLicense {
         }).sort();
     }
 
-    // 返回有两个相同字母的车牌号array
+    // 返回有且只有两个相同字母的车牌号array
     getDoubleLicenses() {
-        const licenseArray = [];
-        for (let licenseNum of this.licenseSet) {
-            const letters = licenseNum.slice(1, 4);
-            if (letters[0] === letters[1] || letters[1] === letters[2] || letters[0] === letters[2]) licenseArray.push(licenseNum)
-        }
-        return licenseArray;
+        // const licenseArray = [];
+        // for (let licenseNum of this.licenseSet) {
+        //     const letterPart = licenseNum.slice(1, 4).split("");
+        //     const letterMap = letterPart.reduce((acc, letter) => {
+        //         acc[letter] = acc[letter] + 1 || 1;
+        //         return acc;
+        //     }, {})
+        //     licenseArray.push(Object.values(letterMap).some(count => count === 2));
+        // }
+        // return licenseArray;
+
+        return [...this.licenseSet].filter(licenesNum => {
+            // Step 1: get the list of letters from each license
+            // i.e. ['6LXD666'] => ['LZD']
+            const letterPart = licenesNum.slice(1, 4).split("");
+            // Step 2: build the letter-count map
+            // i.e. 'LZZ' => {'L':1, 'Z':2}
+            const letterMap = letterPart.reduce((acc, letter) => {
+                acc[letter] = acc[letter] + 1 || 1;
+                return acc;
+            }, {})
+
+            // Step 3: check if any val (the  'count') equals to 2
+            // i.e. Object.values({'L':1, 'Z':2}) => [1,2]
+            // [1,2].some(((count)=>count===2)) gets true
+            return Object.values(letterMap).some(count => count === 2);
+        })
     }
 
     // 返回三个字母都相同的车牌号array
