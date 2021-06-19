@@ -259,11 +259,13 @@ describe("#12 For the stats-men", () => {
         pl.batchGenerateLicenses(1000);
         const tripleLicenses = pl.getLuckyLicenses();
         const licenseNum = pl._getRandomItemFromArray(tripleLicenses);
-        const letterSet = new Set();
-        for (const letter of licenseNum.slice(1, 4)) {
-            letterSet.add(letter);
+        if (licenseNum) {
+            const letterSet = new Set();
+            for (const letter of licenseNum.slice(1, 4)) {
+                letterSet.add(letter);
+            }
+            expect(letterSet.size).toBe(1)
         }
-        expect(letterSet.size).toBe(1)
     });
 
     it("get royalLicense", () => {
@@ -292,5 +294,21 @@ describe("#11 For license prefix tree", () => {
         expect(count).toBe(6);
         count = pl.searchLicensesByDFS('5');
         expect(count).toBe(2);
-    })
-})
+    });
+
+    it("search the tree by BFS", () => {
+        pl.addLicenseToTree("7LZD666");
+        pl.addLicenseToTree("7LZD667");
+        pl.addLicenseToTree("7LZS666");
+        pl.addLicenseToTree("7LZS668");
+        pl.addLicenseToTree("6LBD666");
+        pl.addLicenseToTree("8LBD669");
+        pl.addLicenseToTree("9LBD669");
+        pl.printLicenseTree();
+        let count = pl.searchLicensesByBFS('7');
+        expect(count).toBe(4);
+        count = pl.searchLicensesByBFS('9');
+        expect(count).toBe(1);
+    });
+
+});

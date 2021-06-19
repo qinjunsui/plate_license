@@ -63,6 +63,22 @@ class PlateLicense {
         return count;
     }
 
+    searchLicensesByBFS(startNum) {
+        let count = 0;
+        const queue = [this.licenseTree[startNum]];
+        while (queue.length) {
+            const node = queue.shift();
+            if (Object.keys(node).length === 0) {
+                count++
+            } else {
+                for (const childNode of Object.values(node)) {
+                    queue.push(childNode);
+                }
+            }
+        }
+        return count;
+    }
+
 
 
     // 生成一个含有新的license号码的object，并更新到this.licenses的array里
