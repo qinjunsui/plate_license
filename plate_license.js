@@ -13,11 +13,29 @@ class PlateLicense {
         this.licenses = [MOCK_LICENSE_OBJECT];
         this.licenseSet = new Set();
         this.licenseSet.add(MOCK_LICENSE_OBJECT.license);
+        this.licenseTree = {};
+        // this.addLicenseToTree(MOCK_LICENSE_OBJECT.license);
+        // this.printLicenseTree();
     }
 
     // 拿到一个array里的所有的licenses
     getLicenses() {
         return this.licenses;
+    }
+
+    // i.e. '6LZD666' converts to '6'->'L'->'Z'->'D'->'6'->'6'->'6'
+    addLicenseToTree(licenseNum) {
+        let node = this.licenseTree;    // tree root(get the point of the tree object)
+        for (const letter of licenseNum) {
+            if (!node[letter]) node[letter] = {} // 为了继续往下加东西
+            node = node[letter];    //切换指针到下一级
+        }
+    }
+
+    printLicenseTree() {
+        const treeInJSON = JSON.stringify(this.licenseTree, null, 2);
+        console.log(treeInJSON);
+        fs.writeFileSync('./tree.json', treeInJSON);
     }
 
     // 生成一个含有新的license号码的object，并更新到this.licenses的array里
@@ -44,6 +62,7 @@ class PlateLicense {
             licenseNumber = buildLicenseNumber();
         }
         this.licenseSet.add(licenseNumber)  // add licenseNumber to set
+        this.addLicenseToTree(licenseNumber)    //add licenseNumber into the tree;
 
         const licenseObject = {
             license: licenseNumber,
@@ -164,6 +183,7 @@ class PlateLicense {
 
     // 返回有且只有两个相同字母的车牌号array
     getDoubleLicenses() {
+        /** Method 1 */
         // const licenseArray = [];
         // for (let licenseNum of this.licenseSet) {
         //     const letterPart = licenseNum.slice(1, 4).split("");
@@ -175,6 +195,7 @@ class PlateLicense {
         // }
         // return licenseArray;
 
+        /** Method 2 */
         return [...this.licenseSet].filter(licenesNum => {
             // Step 1: get the list of letters from each license
             // i.e. ['6LXD666'] => ['LZD']
@@ -191,6 +212,11 @@ class PlateLicense {
             // [1,2].some(((count)=>count===2)) gets true
             return Object.values(letterMap).some(count => count === 2);
         })
+
+        /** Method 3 */
+        // return [...this.licenseSet].filter(letterNumber => {
+        //     return new Set(letterNumber.slice(1, 4)).size === 2
+        // })
     }
 
     // 返回三个字母都相同的车牌号array
@@ -210,21 +236,7 @@ class PlateLicense {
     }
 
     // 返回三个字母都相同&至少两个数字相同的车牌号array
-    // getRoyalLicenses() {
-    //     const licenseArray = [];
-    //     for (let licenseNum of this.licenseSet) {
-    //         const letters = licenseNum.slice(1, 4);
-    //         const nums = licenseNum[0] + licenseNum.slice(-3);
-    //         const numMap = {};
-    //         for (let i of nums) {
-    //             numMap[i] = numMap[i] ? numMap[i]++ : 1
-    //         }
-
-    //         if (letters[0] === letters[1] && letters[1] === letters[2] && Object.values(numMap).sort().slice(-1) >= 2) licenseArray.push(licenseNum)
-    //     }
-    //     return licenseArray;
-    // }
-
+    /** Method 1 */
     // getRoyalLicenses() {
     //     const luckyLicenses = this.getLuckyLicenses();
     //     const royalLicenses = [];
@@ -235,15 +247,16 @@ class PlateLicense {
     //             numMap[num] = numMap[num] + 1 || 1
 
     //         }
-    //         console.log(licenseNum)
-    //         console.log(Object.values(numMap).sort().slice(-1)[0])
-    //         if (Object.values(numMap).sort().slice(-1)[0] >= 2) {
+    //         const royalLicensesArray = Object.values(numMap).sort();
+    //         if (royalLicensesArray[royalLicensesArray.length - 1] >= 2) {
+    //             // if (Object.values(numMap).sort().slice(-1)[0] >= 2) {
     //             royalLicenses.push(licenseNum)
     //         }
     //     }
     //     return royalLicenses;
     // }
 
+    /** Method 2 */
     getRoyalLicenses() {
         // Step 1: get Lucky licenses and filter from them
         const licenseNumbers = this.getLuckyLicenses();

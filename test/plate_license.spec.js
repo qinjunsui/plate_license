@@ -274,4 +274,14 @@ describe("#12 For the stats-men", () => {
             expect(new Set(numberParts).size).toBeLessThan(4)
         }
     })
+});
+
+ddescribe("#11 For license prefix tree", () => {
+    iit("add the default license to tree", () => {
+        // pl.addLicenseToTree("6LZD667");
+        // pl.addLicenseToTree("6LZS666");
+        // pl.addLicenseToTree("6LBD666");
+        pl.batchGenerateLicenses(40);
+        pl.printLicenseTree();
+    })
 })
